@@ -1,1 +1,1 @@
-# team_nareyeon \n # yuri visual novel
+# team_nareyeon's first yuri visual novel
