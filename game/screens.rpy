@@ -129,6 +129,7 @@ style namebox is default
 style namebox_label is say_label
 
 
+
 style window:
     xalign 0.5
     xfill True
@@ -149,12 +150,22 @@ style namebox:
 
 style say_label:
     properties gui.text_properties("name", accent=True)
+    
     xalign gui.name_xalign
     yalign 0.5
 
+#drop shaddow
+init python:
+    outlineList = []
+    # for i in range(3,10):
+    #     outlineList.append((absolute(i*i/3), (0,0,0,13), absolute(3), absolute(4)))
+
 style say_dialogue:
     properties gui.text_properties("dialogue")
-
+    #shadow     
+    outlines outlineList
+    # line_leading 0
+    # line_spacing 0
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
@@ -1437,6 +1448,7 @@ style pref_vbox:
 ## 마우스가 없고 화면이 작을 가능성이 높으므로, 퀵메뉴 버튼의 크기를 키우고 가짓
 ## 수를 줄입니다.
 # 
+
 init python :
     drop_menu_ = False
 screen quick_menu():
@@ -1452,28 +1464,28 @@ screen quick_menu():
     elif quick_menu:
         hbox:
             at transform:
-                xalign 1.0
+                xalign 0.99
                 yalign -0.1
                 linear 0.15 yalign 0.0
-            style_prefix "quick"
-
-            xalign 1.0
-            yalign 0
-            
-            textbutton _("메뉴") action SetVariable("drop_menu_", True)
+            # style_prefix "quick"
+            imagebutton:
+                    auto "gui/menu/show_dropdown_%s.png" 
+                    action SetVariable("drop_menu_", True)
+                    margin (50, 0)
+            # textbutton _("메뉴") action SetVariable("drop_menu_", True)
           
 
 screen drop_menu():
-    variant "touch"
+    # variant "touch"
     tag menu
     zorder 100
 
     hbox:
-        style_prefix "quick"
         at transform:
-            xalign 1.0
+            xalign 0.99
             yalign -0.1
             linear 0.15 yalign 0.0
+        style_prefix "quick"
             
 
         textbutton _("세이브") action ShowMenu('save')
@@ -1482,8 +1494,11 @@ screen drop_menu():
         textbutton _("오토") action Preference("auto-forward", "toggle")
         textbutton _("로그") action Rollback()
         textbutton _("설정") action ShowMenu('history')
-        textbutton _("메뉴 숨기기") action SetVariable("drop_menu_", False)
-        
+        imagebutton:
+            auto "gui/menu/hide_dropdown_%s.png" 
+            action SetVariable("drop_menu_", False)
+            margin (50, 0)
+
                                
 
             
@@ -1491,7 +1506,8 @@ screen drop_menu():
 
 style window:
     variant "small"
-    background "gui/phone/textbox.png"
+    # background "gui/menu/textbox_blk.png"
+    background "gui/menu/textbox_blk.png"
 
 style radio_button:
     variant "small"

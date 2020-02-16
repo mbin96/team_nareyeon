@@ -61,10 +61,10 @@ define gui.interface_text_color = '#ffffff'
 ## 글자와 글자 크기 ###################################################################
 
 ## 인-게임 글자에 사용됩니다.
-define gui.text_font = "NotoSansCJKjp-Regular.otf"
+define gui.text_font = "NotoSansCJKjp-Medium.otf"
 
 ## 캐릭터의 이름에 사용됩니다.
-define gui.name_text_font = "NotoSansCJKjp-Regular.otf"
+define gui.name_text_font = "NotoSansCJKjp-Bold.otf"
 
 ## 인터페이스에 사용됩니다.
 define gui.interface_text_font = "NotoSansCJKjp-Regular.otf"
@@ -109,16 +109,16 @@ define gui.textbox_yalign = 1.0
 
 ## 말하는 캐릭터의 이름을 텍스트 박스를 기준으로 배치합니다. 이것은 좌측이나 최
 ## 상단으로부터 전체 픽셀값의 숫자가 되거나, 0.5로 중앙이 될 수 있습니다.
-define gui.name_xpos = 360
-define gui.name_ypos = -60
+define gui.name_xpos = 250
+define gui.name_ypos = 200
 
 ## 캐릭터들의 이름을 수평으로 정렬합니다. 이것은 0.0으로 좌측 정렬, 0.5로 중앙,
 ## 그리고 1.0으로 우측 정렬될 수 있습니다.
-define gui.name_xalign = 0.0
+define gui.name_xalign = 0.5
 
 ## 캐릭터들의 이름이 들어 있는 박스의 너비, 높이, 그리고 테두리입니다. 혹은 그것
 ## 을 None으로 자동 설정할 수 있습니다.
-define gui.namebox_width = None
+define gui.namebox_width = 400
 define gui.namebox_height = None
 
 ## 캐릭터의 이름이 들어 있는 박스의 테두리를 좌측, 상단, 우측, 하단의 순서로 정
@@ -132,8 +132,8 @@ define gui.namebox_tile = False
 
 ## 텍스트박스에서 대사의 위치입니다. These can be a whole number of pixels
 ## relative to the left or top side of the textbox, or 0.5 to center.
-define gui.dialogue_xpos = 350
-define gui.dialogue_ypos = 40
+define gui.dialogue_xpos = 550
+define gui.dialogue_ypos = 180
 
 ## 픽셀값에서 대사의 최대 너비입니다.
 define gui.dialogue_width = 1116
@@ -427,18 +427,55 @@ init python:
     if renpy.variant("small"):
 
         ## 글자 크기들.
-        gui.text_size = 45
-        gui.name_text_size = 54
+        gui.text_size = 47
+        gui.name_text_size = 47
         gui.notify_text_size = 38
         gui.interface_text_size = 45
+        gui.quick_button_text_size = 45
         gui.button_text_size = 45
         gui.label_text_size = 51
 
         ## 텍스트박스의 위치를 조정합니다.
-        # gui.textbox_height = 360
-        gui.name_xpos = 120
-        gui.text_xpos = 135
-        gui.text_width = 1650
+        # gui.textbox_height = 421
+        # gui.name_xpos = 250
+        # gui.text_xpos = 135
+        # gui.text_width = 1650
+
+        ## 대사를 포함하는 텍스트 박스의 높이입니다.
+        gui.textbox_height = 421
+
+        ## 말하는 캐릭터의 이름을 텍스트 박스를 기준으로 배치합니다. 이것은 좌측이나 최
+        ## 상단으로부터 전체 픽셀값의 숫자가 되거나, 0.5로 중앙이 될 수 있습니다.
+        gui.name_xpos = 260
+        gui.name_ypos = 180
+
+        ## 캐릭터들의 이름을 수평으로 정렬합니다. 이것은 0.0으로 좌측 정렬, 0.5로 중앙,
+        ## 그리고 1.0으로 우측 정렬될 수 있습니다.
+        gui.name_xalign = 0.5
+
+        ## 캐릭터들의 이름이 들어 있는 박스의 너비, 높이, 그리고 테두리입니다. 혹은 그것
+        ## 을 None으로 자동 설정할 수 있습니다.
+        gui.namebox_width = 400
+        gui.namebox_height = None
+
+        ## 캐릭터의 이름이 들어 있는 박스의 테두리를 좌측, 상단, 우측, 하단의 순서로 정
+        ## 합니다.
+        gui.namebox_borders = Borders(5, 5, 5, 5)
+
+        ## 만약 참(True)이면, 네임박스의 배경은 바둑판식으로 배열(tiled)될 것이고, 거짓
+        ## (False)이면, 네임박스의 배경은 채워질(scaled) 것입니다.
+        gui.namebox_tile = False
+
+
+        ## 텍스트박스에서 대사의 위치입니다. These can be a whole number of pixels
+        ## relative to the left or top side of the textbox, or 0.5 to center.
+        gui.dialogue_xpos = 520
+        gui.dialogue_ypos = 180
+
+        ## 픽셀값에서 대사의 최대 너비입니다.
+        gui.dialogue_width = 1116
+
+
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54
