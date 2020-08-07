@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/screens.rpy", line 153: style property linespacing is not known.
-    linespacing 2
-               ^
+File "game/screens.rpy", line 1473: Line is indented, but the preceding background statement does not expect a block. Please check this line's indentation.
+    yalign -0.2
+    ^
 
 Ren'Py Version: Ren'Py 7.3.5.606
-Sat Feb 15 20:50:03 2020
+Thu Feb 27 02:48:43 2020

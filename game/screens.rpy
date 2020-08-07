@@ -111,7 +111,7 @@ screen say(who, what):
 
     ## 사이드 이미지가 있는 경우 글자 위에 표시합니다. 휴대폰 환경에서는 보이지
     ## 않습니다.
-    if not renpy.variant("small"):
+    if not renpy.variant(["small", "medium"]):
         add SideImage() xalign 0.0 yalign 1.0
 
 
@@ -128,6 +128,15 @@ style say_thought is say_dialogue
 style namebox is default
 style namebox_label is say_label
 
+
+#for blury drop shaddow
+init python:
+    outlineList = []
+    #outline
+    outlineList.append((2, (0,0,0,50), absolute(0), absolute(0)))
+    # drop shadow
+    for i in range(1,15):
+        outlineList.append((absolute(i*i/7), (0,0,0,10-(i/2)), absolute(((-10)**i)*(3-i)%4+2), absolute(((-10)**i)*(3-i)%4+2)))
 
 
 style window:
@@ -150,22 +159,18 @@ style namebox:
 
 style say_label:
     properties gui.text_properties("name", accent=True)
+    #shadow     
+    outlines outlineList
     
     xalign gui.name_xalign
     yalign 0.5
-
-#drop shaddow
-init python:
-    outlineList = []
-    # for i in range(3,10):
-    #     outlineList.append((absolute(i*i/3), (0,0,0,13), absolute(3), absolute(4)))
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
     #shadow     
     outlines outlineList
     # line_leading 0
-    # line_spacing 0
+    line_spacing -10
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
@@ -252,7 +257,7 @@ screen quick_menu():
 
     ## Ensure this appears on top of other screens.
     zorder 100
-
+    variant "pc"
     if quick_menu:
 
         vbox:
@@ -308,7 +313,10 @@ default quick_menu = True
 
 
 style quick_button is default
-style quick_button_text is button_text
+style quick_button_text is button_text :
+    outlines outlineList[1:-1]
+    font "GmarketSansMedium.otf"
+
 
 style quick_button:
     properties gui.button_properties("quick_button")
@@ -1436,7 +1444,8 @@ style nvl_button_text:
     properties gui.button_text_properties("nvl_button")
 
 
-
+init python :
+    drop_menu_ = False
 ################################################################################
 ## 모바일 버전
 ################################################################################
@@ -1449,138 +1458,183 @@ style pref_vbox:
 ## 수를 줄입니다.
 # 
 
-init python :
-    drop_menu_ = False
+
 screen quick_menu():
     variant "touch"
 
     zorder 100
 
-    
+    window:
+        xalign 0.5
+        yalign 0.0
+        if drop_menu_:
+            # use drop_menu
+            background "gui/menu/drop_menu.png"
+            hbox:
+                at transform:
+                    xalign 0.5
+                    yalign -0.2
+                    linear 0.25 yalign 0.0
+                style_prefix "quick"
+                    
 
-    if drop_menu_:
-        
-        use drop_menu
-    elif quick_menu:
-        hbox:
-            at transform:
-                xalign 0.99
-                yalign -0.1
-                linear 0.15 yalign 0.0
-            # style_prefix "quick"
-            imagebutton:
-                    auto "gui/menu/show_dropdown_%s.png" 
-                    action SetVariable("drop_menu_", True)
-                    margin (50, 0)
-            # textbutton _("메뉴") action SetVariable("drop_menu_", True)
-          
+                textbutton _("SAVE") action ShowMenu('save')
+                textbutton _("LOAD") action ShowMenu('load')
+                textbutton _("SKIP") action Skip() alternate Skip(fast=True, confirm=True)
+                textbutton _("AUTO") action Preference("auto-forward", "toggle")
+                textbutton _("LOG")  action ShowMenu('history')
+                textbutton _("SETTING") action ShowMenu('preferences')
+        else:
+            background 
+        imagebutton:
+            xalign 0.98
+            yalign 0.03
+            if drop_menu_:
+                auto "gui/menu/hide_dropdown_%s.png" 
+                action SetVariable("drop_menu_", False)
+            else :
+                auto "gui/menu/show_dropdown_%s.png" 
+                action SetVariable("drop_menu_", True)
+            margin (50, 0)
+
+
+
+                # hbox:
+                # at transform:
+                #     xalign 0.99
+                #     yalign -0.1
+                #     linear 0.15 yalign 0.0
+                # style_prefix "quick"
+                # imagebutton:
+                #     auto "gui/menu/show_dropdown_%s.png" 
+                #     action SetVariable("drop_menu_", True)
+                #     margin (50, 0)
+                # # textbutton _("메뉴") action SetVariable("drop_menu_", True)
+
+            
+            
 
 screen drop_menu():
     # variant "touch"
+    
     tag menu
     zorder 100
-
-    hbox:
-        at transform:
-            xalign 0.99
-            yalign -0.1
-            linear 0.15 yalign 0.0
-        style_prefix "quick"
-            
-
-        textbutton _("세이브") action ShowMenu('save')
-        textbutton _("로드") action ShowMenu('load')
-        textbutton _("스킵") action Skip() alternate Skip(fast=True, confirm=True)
-        textbutton _("오토") action Preference("auto-forward", "toggle")
-        textbutton _("로그") action Rollback()
-        textbutton _("설정") action ShowMenu('history')
+    
+    window:
+        background "gui/menu/drop_menu.png"
+        xalign 0.5
+        yalign 0.0
+           
         imagebutton:
+            xalign 0.98
             auto "gui/menu/hide_dropdown_%s.png" 
             action SetVariable("drop_menu_", False)
             margin (50, 0)
+        
+        hbox:
+            at transform:
+                xalign 0.5
+                yalign -0.2
+                linear 0.25 yalign 0.0
+            style_prefix "quick"
+                
 
+            textbutton _("SAVE") action ShowMenu('save')
+            textbutton _("LOAD") action ShowMenu('load')
+            textbutton _("SKIP") action Skip() alternate Skip(fast=True, confirm=True)
+            textbutton _("AUTO") action Preference("auto-forward", "toggle")
+            textbutton _("LOG")  action ShowMenu('history')
+            textbutton _("SETTING") action ShowMenu('preferences')
+         
+
+
+# style drop_menu:
+#     xalign 0.5
+#     xfill True
+#     yalign 1
+#     # background "gui/menu/drop_menu.png"
                                
 
             
 
 
 style window:
-    variant "small"
-    # background "gui/menu/textbox_blk.png"
+    variant ["small", "medium"]
     background "gui/menu/textbox_blk.png"
+    # background "gui/menu/textbox.png"
 
 style radio_button:
-    variant "small"
+    variant ["small", "medium"]
     foreground "gui/phone/button/radio_[prefix_]foreground.png"
 
 style check_button:
-    variant "small"
+    variant ["small", "medium"]
     foreground "gui/phone/button/check_[prefix_]foreground.png"
 
 style nvl_window:
-    variant "small"
+    variant ["small", "medium"]
     background "gui/phone/nvl.png"
 
 style main_menu_frame:
-    variant "small"
+    variant ["small", "medium"]
     background "gui/phone/overlay/main_menu.png"
 
 style game_menu_outer_frame:
-    variant "small"
+    variant ["small", "medium"]
     background "gui/phone/overlay/game_menu.png"
 
 style game_menu_navigation_frame:
-    variant "small"
+    variant ["small", "medium"]
     xsize 510
 
 style game_menu_content_frame:
-    variant "small"
+    variant ["small", "medium"]
     top_margin 0
 
 style pref_vbox:
-    variant "small"
+    variant ["small", "medium"]
     xsize 600
 
 style bar:
-    variant "small"
+    variant ["small", "medium"]
     ysize gui.bar_size
     left_bar Frame("gui/phone/bar/left.png", gui.bar_borders, tile=gui.bar_tile)
     right_bar Frame("gui/phone/bar/right.png", gui.bar_borders, tile=gui.bar_tile)
 
 style vbar:
-    variant "small"
+    variant ["small", "medium"]
     xsize gui.bar_size
     top_bar Frame("gui/phone/bar/top.png", gui.vbar_borders, tile=gui.bar_tile)
     bottom_bar Frame("gui/phone/bar/bottom.png", gui.vbar_borders, tile=gui.bar_tile)
 
 style scrollbar:
-    variant "small"
+    variant ["small", "medium"]
     ysize gui.scrollbar_size
     base_bar Frame("gui/phone/scrollbar/horizontal_[prefix_]bar.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
     thumb Frame("gui/phone/scrollbar/horizontal_[prefix_]thumb.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
 
 style vscrollbar:
-    variant "small"
+    variant ["small", "medium"]
     xsize gui.scrollbar_size
     base_bar Frame("gui/phone/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
     thumb Frame("gui/phone/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
 
 style slider:
-    variant "small"
+    variant ["small", "medium"]
     ysize gui.slider_size
     base_bar Frame("gui/phone/slider/horizontal_[prefix_]bar.png", gui.slider_borders, tile=gui.slider_tile)
     thumb "gui/phone/slider/horizontal_[prefix_]thumb.png"
 
 style vslider:
-    variant "small"
+    variant ["small", "medium"]
     xsize gui.slider_size
     base_bar Frame("gui/phone/slider/vertical_[prefix_]bar.png", gui.vslider_borders, tile=gui.slider_tile)
     thumb "gui/phone/slider/vertical_[prefix_]thumb.png"
 
 style slider_pref_vbox:
-    variant "small"
+    variant ["small", "medium"]
     xsize None
 
 style slider_pref_slider:
-    variant "small"
+    variant ["small", "medium"]
     xsize 900

@@ -61,7 +61,7 @@ define gui.interface_text_color = '#ffffff'
 ## 글자와 글자 크기 ###################################################################
 
 ## 인-게임 글자에 사용됩니다.
-define gui.text_font = "NotoSansCJKjp-Medium.otf"
+define gui.text_font = "NotoSansCJKjp-Regular.otf"
 
 ## 캐릭터의 이름에 사용됩니다.
 define gui.name_text_font = "NotoSansCJKjp-Bold.otf"
@@ -420,20 +420,26 @@ init python:
 
         # gui.quick_button_borders = Borders(60, 21, 60, 0)
         
-        gui.quick_button_borders = Borders(100, 40, 80, 0)
+        gui.quick_button_borders = Borders(60, 30, 60, 20)
+        
+        # gui.quick_button_text_size = 45
 
     ## 이것은 휴대전화에서 다양한 GUI 요소들의 크기와 간격을 쉽게 보일 수 있도록
     ## 변경합니다.
-    if renpy.variant("small"):
+    if renpy.variant("small") or renpy.variant("medium"):
+
+
+        gui.quick_button_text_idle_color = '#ffffffee'
 
         ## 글자 크기들.
         gui.text_size = 47
         gui.name_text_size = 47
         gui.notify_text_size = 38
-        gui.interface_text_size = 45
-        gui.quick_button_text_size = 45
+        gui.interface_text_size = 38
+        gui.quick_button_text_size = 28
         gui.button_text_size = 45
         gui.label_text_size = 51
+        
 
         ## 텍스트박스의 위치를 조정합니다.
         # gui.textbox_height = 421
@@ -447,7 +453,7 @@ init python:
         ## 말하는 캐릭터의 이름을 텍스트 박스를 기준으로 배치합니다. 이것은 좌측이나 최
         ## 상단으로부터 전체 픽셀값의 숫자가 되거나, 0.5로 중앙이 될 수 있습니다.
         gui.name_xpos = 260
-        gui.name_ypos = 180
+        gui.name_ypos = 120
 
         ## 캐릭터들의 이름을 수평으로 정렬합니다. 이것은 0.0으로 좌측 정렬, 0.5로 중앙,
         ## 그리고 1.0으로 우측 정렬될 수 있습니다.
@@ -470,10 +476,10 @@ init python:
         ## 텍스트박스에서 대사의 위치입니다. These can be a whole number of pixels
         ## relative to the left or top side of the textbox, or 0.5 to center.
         gui.dialogue_xpos = 520
-        gui.dialogue_ypos = 180
+        gui.dialogue_ypos = 120
 
         ## 픽셀값에서 대사의 최대 너비입니다.
-        gui.dialogue_width = 1116
+        gui.dialogue_width = 1300
 
 
 
@@ -487,8 +493,6 @@ init python:
 
         gui.history_height = 285
         gui.history_text_width = 1035
-
-        gui.quick_button_text_size = 30
 
         ## 파일 버튼 레이아웃.
         gui.file_slot_cols = 3
